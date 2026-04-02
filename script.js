@@ -82,38 +82,4 @@ document.querySelectorAll('.fade-on-scroll, .stagger-item').forEach(el => {
     observer.observe(el);
 });
 
-// Lightbox Logic for Photo Gallery
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.querySelector('.lightbox-img');
-const lightboxCaption = document.querySelector('.lightbox-caption');
-
-document.querySelectorAll('.masonry-item').forEach(item => {
-    item.addEventListener('click', () => {
-        const img = item.querySelector('img');
-        const caption = item.querySelector('.gallery-overlay span');
-        
-        lightboxImg.src = img.src;
-        lightboxImg.alt = img.alt;
-        lightboxCaption.textContent = caption ? caption.textContent : '';
-        
-        lightbox.classList.add('active');
-        lightbox.setAttribute('aria-hidden', 'false');
-    });
-});
-
-// Close lightbox on click anywhere outside the main image (or on the close btn)
-lightbox.addEventListener('click', (e) => {
-    if (e.target !== lightboxImg) {
-        lightbox.classList.remove('active');
-        lightbox.setAttribute('aria-hidden', 'true');
-    }
-});
-
-// keyboard accessibility for lightbox (Escape to close)
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-        lightbox.classList.remove('active');
-        lightbox.setAttribute('aria-hidden', 'true');
-    }
-});
 
