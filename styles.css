@@ -154,7 +154,7 @@ p {
 }
 
 #navbar {
-    position: fixed;
+    position: sticky;
     top: 0;
     width: 100%;
     background: rgba(10, 25, 47, 0.9);
@@ -911,9 +911,9 @@ footer {
     }
 
     .nav-links {
-        position: fixed;
+        position: absolute;
         right: -100%;
-        top: 70px;
+        top: 100%;
         flex-direction: column;
         background: rgba(10, 25, 47, 0.95);
         backdrop-filter: blur(10px);
