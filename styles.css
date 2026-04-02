@@ -17,12 +17,17 @@
     scroll-behavior: smooth;
 }
 
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+}
+
 body {
     font-family: var(--font-main);
     background-color: var(--primary-bg);
     color: var(--text-main);
     line-height: 1.6;
-    overflow-x: hidden;
 }
 
 .visually-hidden {
@@ -917,7 +922,8 @@ footer {
 
     .nav-links {
         position: absolute;
-        right: -100%;
+        right: 0;
+        transform: translateX(100%);
         visibility: hidden;
         top: 100%;
         flex-direction: column;
@@ -927,13 +933,13 @@ footer {
         height: calc(100vh - 70px);
         text-align: center;
         padding-top: 3rem;
-        transition: right 0.4s ease-in-out, visibility 0s linear 0.4s;
+        transition: transform 0.4s ease-in-out, visibility 0s linear 0.4s;
     }
 
     .nav-links.active {
-        right: 0;
+        transform: translateX(0);
         visibility: visible;
-        transition: right 0.4s ease-in-out, visibility 0s;
+        transition: transform 0.4s ease-in-out, visibility 0s;
     }
 
     .hero-content h1 {
