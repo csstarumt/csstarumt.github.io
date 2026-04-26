@@ -817,7 +817,6 @@ section {
     box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
 }
 
-/* Carousel Section - Curved 3D Coverflow */
 .carousel-section {
     text-align: center;
 }
@@ -835,17 +834,14 @@ section {
 .carousel-track-container {
     perspective: 1200px;
     width: 100%;
-    /* removed overflow hidden to allow 3d elements to spread out slightly, or keep it to contain */
     overflow: hidden;
     padding: 2rem 0;
 }
 
 .carousel-track {
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 400px;
+    display: grid;
+    place-items: center;
     transform-style: preserve-3d;
     margin: 0;
     padding: 0;
@@ -853,10 +849,9 @@ section {
 }
 
 .carousel-slide {
-    position: absolute;
-    width: 60%;
-    max-width: 500px;
-    height: 100%;
+    grid-area: 1 / 1;
+    width: 90%;
+    max-width: 800px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -867,11 +862,12 @@ section {
 }
 
 .carousel-slide img {
-    max-width: 100%;
-    max-height: 400px;
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
     object-fit: contain;
     border-radius: 12px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
     border: 2px solid rgba(0, 240, 255, 0.1);
     transition: var(--transition);
 }
@@ -1137,16 +1133,8 @@ footer {
     }
 
     /* Carousel Responsive - Tablet */
-    .carousel-track {
-        height: 300px;
-    }
-    
     .carousel-slide {
         width: 75%;
-    }
-    
-    .carousel-slide img {
-        max-height: 300px;
     }
 
     .carousel-slide.prev {
@@ -1180,16 +1168,8 @@ footer {
     }
 
     /* Carousel Responsive - Mobile */
-    .carousel-track {
-        height: 250px;
-    }
-    
     .carousel-slide {
         width: 85%;
-    }
-    
-    .carousel-slide img {
-        max-height: 250px;
     }
 
     .carousel-slide.prev {
@@ -1201,7 +1181,7 @@ footer {
         transform: translateX(65%) scale(0.9) translateZ(-60px) rotateY(-10deg);
         opacity: 0.3;
     }
-    
+
     .carousel-slide.hidden-left {
         transform: translateX(-100%) scale(0.8) translateZ(-100px) rotateY(15deg);
     }
@@ -1215,7 +1195,7 @@ footer {
         height: 40px;
         font-size: 1rem;
     }
-    
+
     .prev-btn {
         left: 5px;
     }

@@ -5,7 +5,7 @@ const navLinks = document.querySelector('.nav-links');
 // Toggle navigation dropdown and swap generic icons
 hamburger.addEventListener('click', () => {
     navLinks.classList.toggle('active');
-    
+
     const icon = hamburger.querySelector('i');
     if (navLinks.classList.contains('active')) {
         icon.classList.remove('fa-bars');
@@ -36,7 +36,6 @@ const navbar = document.getElementById('navbar');
 const backToTop = document.getElementById('backToTop');
 
 window.addEventListener('scroll', () => {
-    // Navbar styling
     if (window.scrollY > 50) {
         navbar.style.background = 'rgba(10, 25, 47, 0.98)';
         navbar.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.5)';
@@ -73,7 +72,7 @@ const observer = new IntersectionObserver((entries, observer) => {
         if (entry.isIntersecting) {
             entry.target.classList.add('visible');
             // We unobserve to only animate once
-            observer.unobserve(entry.target); 
+            observer.unobserve(entry.target);
         }
     });
 }, observerOptions);
@@ -82,7 +81,7 @@ document.querySelectorAll('.fade-on-scroll, .stagger-item').forEach(el => {
     observer.observe(el);
 });
 
-// Carousel Logic
+// Carousel 
 const track = document.querySelector('.carousel-track');
 if (track) {
     const slides = Array.from(track.children);
@@ -96,15 +95,14 @@ if (track) {
 
     const moveToSlide = (index) => {
         currentSlideIndex = index;
-        
+
         slides.forEach((slide, i) => {
-            // Remove all layout classes
             slide.classList.remove('active', 'prev', 'next', 'hidden-left', 'hidden-right', 'current-slide');
-            
+
             if (i === currentSlideIndex) {
                 slide.classList.add('active', 'current-slide');
             } else if (i === currentSlideIndex - 1 || (currentSlideIndex === 0 && i === slides.length - 1)) {
-                if (slides.length > 2 || i < currentSlideIndex) { 
+                if (slides.length > 2 || i < currentSlideIndex) {
                     slide.classList.add('prev');
                 } else {
                     slide.classList.add('next');
@@ -153,7 +151,7 @@ if (track) {
     const prevSlide = () => {
         let prevIndex = currentSlideIndex - 1;
         if (prevIndex < 0) {
-            prevIndex = slides.length - 1; // wrap around
+            prevIndex = slides.length - 1;
         }
         moveToSlide(prevIndex);
     };
@@ -184,7 +182,6 @@ if (track) {
         moveToSlide(targetIndex);
         resetAutoSlide();
     });
-    
-    // Initialize auto slide
+
     startAutoSlide();
 }
