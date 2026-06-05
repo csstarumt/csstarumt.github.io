@@ -7,12 +7,9 @@
     <meta name="description"
         content="Computer Science Society - Enhancing digital literacy, technical competency, and industry connections.">
     <title>Computer Science Society</title>
-    <!-- Favicon -->
     <link rel="icon" href="image/logo.png">
     <link rel="stylesheet" href="styles.css">
-    <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -26,10 +23,10 @@
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#highlights">Highlights</a></li>
+                <li><a href="#upcoming">Upcoming</a></li>
                 <li><a href="#schedule">Schedule</a></li>
-                <li><a href="#events">Events</a></li>
+                <li><a href="#events">Past Events</a></li>
                 <li><a href="#gallery">Gallery</a></li>
-                <!-- <li><a href="#committee">Committee</a></li> -->
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <button class="hamburger" aria-label="Toggle Navigation Menu">
@@ -39,7 +36,6 @@
     </nav>
 
     <main>
-        <!-- Home / Hero Section -->
         <section id="home" class="hero-section modern-layout">
             <div class="hero-container">
                 <div class="hero-left fade-on-scroll">
@@ -103,6 +99,57 @@
             <div class="carousel-nav">
                 <button class="carousel-indicator current-indicator" aria-label="Slide 1"></button>
                 <button class="carousel-indicator" aria-label="Slide 2"></button>
+            </div>
+        </section>
+
+        <!-- Upcoming Events Section -->
+        <section id="upcoming" class="upcoming-section fade-on-scroll">
+            <h2>Upcoming Events</h2>
+            <div class="events-grid">
+                <div class="event-card stagger-item">
+                    <div class="card-image upcoming-1">
+                        <img src="image/logo.png" alt="Github Workshop 2026 Logo" class="upcoming-card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="event-tag badge-upcoming">Workshop</span>
+                        <h3>Github Workshop 2026</h3>
+                        <p class="event-meta"><i class="far fa-calendar-alt"></i> 26 Jun 2026 (2pm-5pm)</p>
+                        <p class="event-meta"><i class="fas fa-map-marker-alt"></i> Function Room, Clubhouse</p>
+                        <p class="event-desc">Equip yourself with version control and collaborative coding skills.</p>
+                        <!-- <a href="#" class="btn-card-action" target="_blank" rel="noopener noreferrer">Register Event <i
+                                class="fas fa-chevron-right"></i></a> -->
+                    </div>
+                </div>
+                <div class="event-card stagger-item">
+                    <div class="card-image upcoming-2">
+                        <img src="image/logo.png" alt="ANT International TRX Open Day Image" class="upcoming-card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="event-tag badge-upcoming">Industry Visit</span>
+                        <h3>ANT International TRX Open Day</h3>
+                        <p class="event-meta"><i class="far fa-calendar-alt"></i> Coming Soon</p>
+                        <p class="event-meta"><i class="fas fa-map-marker-alt"></i> TRX, Kuala Lumpur</p>
+                        <p class="event-desc">Join us for an exclusive industry visit. Explore tech career pathways and
+                            network with industry experts.</p>
+                        <!-- <a href="#" class="btn-card-action" target="_blank" rel="noopener noreferrer">Register Event <i
+                                class="fas fa-chevron-right"></i></a> -->
+                    </div>
+                </div>
+                <div class="event-card stagger-item">
+                    <div class="card-image upcoming-3">
+                        <img src="image/logo.png" alt="TARUMT CTF 2026 Logo" class="upcoming-card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="event-tag badge-upcoming">Competition</span>
+                        <h3>TARUMT CTF 2026</h3>
+                        <p class="event-meta"><i class="far fa-calendar-alt"></i> Coming Soon</p>
+                        <p class="event-meta"><i class="fas fa-map-marker-alt"></i> Online</p>
+                        <p class="event-desc">Test your cybersecurity skills in cryptography, reverse engineering, web
+                            hacking, and forensic analysis challenges.</p>
+                        <!-- <a href="#" class="btn-card-action" target="_blank" rel="noopener noreferrer">Register Event <i
+                                class="fas fa-chevron-right"></i></a> -->
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -236,74 +283,6 @@
             </div>
         </section>
 
-        <!-- Committee Section
-        <section id="committee" class="committee-section fade-on-scroll">
-            <h2>Our Committee</h2>
-            <div class="committee-grid">
-                <div class="committee-card stagger-item">
-                    <img src="image/logo.png" alt="President" class="profile-pic" loading="lazy">
-                    <h3>TBA</h3>
-                    <p>President</p>
-                </div>
-                <div class="committee-card stagger-item">
-                    <img src="image/logo.png" alt="Vice President" class="profile-pic" loading="lazy">
-                    <h3>TBA</h3>
-                    <p>Vice President</p>
-                </div>
-                <div class="committee-card stagger-item">
-                    <img src="image/logo.png" alt="Deputy President" class="profile-pic" loading="lazy">
-                    <h3>TBA</h3>
-                    <p>Deputy President</p>
-                </div>
-                <div class="committee-card stagger-item">
-                    <img src="image/logo.png" alt="Deputy Vice President" class="profile-pic" loading="lazy">
-                    <h3>TBA</h3>
-                    <p>Deputy Vice President</p>
-                </div>
-                <div class="committee-card stagger-item">
-                    <img src="image/logo.png" alt="Secretary" class="profile-pic" loading="lazy">
-                    <h3>TBA</h3>
-                    <p>Secretary</p>
-                </div>
-                <div class="committee-card stagger-item">
-                    <img src="image/logo.png" alt="Vice Secretary" class="profile-pic" loading="lazy">
-                    <h3>TBA</h3>
-                    <p>Vice Secretary</p>
-                </div>
-                <div class="committee-card stagger-item">
-                    <img src="image/logo.png" alt="Treasurer" class="profile-pic" loading="lazy">
-                    <h3>TBA</h3>
-                    <p>Treasurer</p>
-                </div>
-                <div class="committee-card stagger-item">
-                    <img src="image/logo.png" alt="Vice Treasurer" class="profile-pic" loading="lazy">
-                    <h3>TBA</h3>
-                    <p>Vice Treasurer</p>
-                </div>
-                <div class="committee-card stagger-item">
-                    <img src="image/logo.png" alt="Programme and Activities Director" class="profile-pic"
-                        loading="lazy">
-                    <h3>TBA</h3>
-                    <p>Programme and Activities Director</p>
-                </div>
-                <div class="committee-card stagger-item">
-                    <img src="image/logo.png" alt="Art and Publicity Director" class="profile-pic" loading="lazy">
-                    <h3>TBA</h3>
-                    <p>Art and Publicity Director</p>
-                </div>
-                <div class="committee-card stagger-item">
-                    <img src="image/logo.png" alt="Technical Resources Director" class="profile-pic" loading="lazy">
-                    <h3>TBA</h3>
-                    <p>Technical Resources Director</p>
-                </div>
-                <div class="committee-card stagger-item">
-                    <img src="image/logo.png" alt="Visual Media Director" class="profile-pic" loading="lazy">
-                    <h3>TBA</h3>
-                    <p>Visual Media Director</p>
-                </div>
-            </div>
-        </section> -->
-
         <!-- Contact Section -->
         <section id="contact" class="contact-section fade-on-scroll">
             <h2>Contact Us</h2>
@@ -350,7 +329,6 @@
     <button id="backToTop" class="back-to-top" aria-label="Scroll back to top">
         <i class="fas fa-chevron-up" aria-hidden="true"></i>
     </button>
-
 
     <script src="script.js"></script>
 </body>
