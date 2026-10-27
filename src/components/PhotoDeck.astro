@@ -1,0 +1,86 @@
+---
+import Photo from "./Photo.astro";
+import { url } from "../lib/site";
+const photos = [
+  {
+    file: "css-symposium-projects.jpg",
+    title: "CSS Symposium 2025",
+    slug: "css-symposium-2025",
+    alt: "Students sharing a project at CSS Symposium",
+  },
+  {
+    file: "google-ai-lab-hands-on.jpg",
+    title: "The Google AI Lab",
+    slug: "google-ai-lab",
+    alt: "Students working on laptops at Google AI Lab",
+  },
+  {
+    file: "ant-industry-conversation.jpg",
+    title: "ANT International TRX Open Day",
+    slug: "ant-international-open-day",
+    alt: "CSS students visiting ANT International",
+  },
+];
+---
+
+<div class="photo-deck">
+  <div class="deck-stack">
+    {
+      photos.map((p, i) => (
+        <figure class="deck-photo" data-deck-index={i}>
+          <>
+            <Photo name={p.file} alt={p.alt} />
+            <figcaption>
+              <>
+                <span>{p.title}</span>
+                <a
+                  href={url(`events/${p.slug}/`)}
+                  aria-label={`Explore ${p.title}`}
+                >
+                  ↗
+                </a>
+              </>
+            </figcaption>
+          </>
+        </figure>
+      ))
+    }
+  </div><div class="deck-controls" hidden>
+    <span class="eyebrow" data-deck-count aria-live="polite"
+      >01 / 03 · CSS Symposium 2025</span
+    ><div>
+      <button type="button" data-deck-prev aria-label="Previous community photo"
+        >←</button
+      ><button type="button" data-deck-next aria-label="Next community photo"
+        >→</button>
+    </div>
+  </div>
+</div>
+<script>
+  const deck = document.querySelector<HTMLElement>(".photo-deck");
+  if (deck) {
+    const photos = [...deck.querySelectorAll<HTMLElement>(".deck-photo")];
+    let index = 0;
+    function update() {
+      photos.forEach((p, i) => {
+        const offset = (i - index + photos.length) % photos.length;
+        p.dataset.offset = String(offset);
+        p.inert = offset !== 0;
+        p.setAttribute("aria-hidden", String(offset !== 0));
+      });
+      deck!.querySelector("[data-deck-count]")!.textContent =
+        `0${index + 1} / 0${photos.length} · ${photos[index].querySelector("figcaption span")!.textContent}`;
+    }
+    deck.classList.add("deck-ready");
+    deck.querySelector<HTMLElement>(".deck-controls")!.hidden = false;
+    deck.querySelector("[data-deck-prev]")!.addEventListener("click", () => {
+      index = (index + photos.length - 1) % photos.length;
+      update();
+    });
+    deck.querySelector("[data-deck-next]")!.addEventListener("click", () => {
+      index = (index + 1) % photos.length;
+      update();
+    });
+    update();
+  }
+</script>

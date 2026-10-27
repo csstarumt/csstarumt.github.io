@@ -1,0 +1,163 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Photo from "../../components/Photo.astro";
+import { url } from "../../lib/site";
+import {
+  statusOf,
+  labels,
+  canRegister,
+  displayDate,
+  displayTime,
+} from "../../lib/events";
+export async function getStaticPaths() {
+  return (await getCollection("events", ({ data }) => !data.draft)).map(
+    (event) => ({ params: { slug: event.id }, props: { event } }),
+  );
+}
+const { event } = Astro.props;
+const d = event.data;
+const { Content } = await render(event);
+const state = statusOf(d);
+const structured =
+  d.start && d.location
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        name: d.title,
+        description: d.summary,
+        startDate: d.start,
+        endDate: d.end,
+        eventStatus:
+          d.status === "cancelled"
+            ? "https://schema.org/EventCancelled"
+            : "https://schema.org/EventScheduled",
+        location: { "@type": "Place", name: d.location },
+        url: new URL(url(`events/${event.id}/`), Astro.site).href,
+        organizer: {
+          "@type": "Organization",
+          name: "TARUMT Computer Science Society",
+          url: new URL(url(), Astro.site).href,
+        },
+      }
+    : null;
+---
+
+<Layout title={d.title} description={d.summary} image={d.cover}
+  >{
+    structured && (
+      <script
+        slot="head"
+        type="application/ld+json"
+        set:html={JSON.stringify(structured).replace(/</g, "\u003c")}
+      />
+    )
+  }
+  <div class="wrap detail-page" data-timing={JSON.stringify(d)}>
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href={url()}>Home</a><span aria-hidden="true">/</span><a
+        href={url("events/")}>Events</a
+      ><span aria-hidden="true">/</span><span aria-current="page"
+        >{d.title}</span>
+    </nav><header class="detail-header">
+      <div class="event-card-meta">
+        <span class="eyebrow">{d.category}</span><span
+          class="status"
+          data-status-label>{labels[state]}</span>
+      </div><h1>{d.title}</h1><p>{d.summary}</p>
+    </header>
+    <div class="detail-grid">
+      <aside class="event-info">
+        <span class="eyebrow">The details</span><dl>
+          <dt>When</dt><dd>
+            {
+              d.start
+                ? displayDate(d.start)
+                : d.year
+                  ? String(d.year)
+                  : state === "tba"
+                    ? "Date to be announced"
+                    : "Date not recorded"
+            }{
+              displayTime(d.start) && (
+                <small>
+                  {displayTime(d.start)}
+                  {displayTime(d.end) && ` – ${displayTime(d.end)}`} (MYT)
+                </small>
+              )
+            }
+          </dd>{
+            d.location && (
+              <>
+                <>
+                  <dt>Where</dt>
+                  <dd>{d.location}</dd>
+                </>
+              </>
+            )
+          }<dt>Event type</dt><dd>{d.category}</dd>
+        </dl>{
+          d.registrationUrl && (
+            <a
+              class="button"
+              href={d.registrationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              hidden={!canRegister(d)}
+              data-registration
+            >
+              Register on Google Forms ↗
+            </a>
+          )
+        }<p
+          class="registration-note"
+          data-registration-note
+          hidden={canRegister(d)}
+        >
+          {
+            state === "past"
+              ? "This event has ended."
+              : state === "cancelled"
+                ? "This event has been cancelled."
+                : state === "tba"
+                  ? "The date will be announced once confirmed."
+                  : "Registration is not currently open."
+          }
+        </p>{
+          d.albumUrl && (
+            <a
+              class="button button-outline"
+              href={d.albumUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View photo album ↗
+            </a>
+          )
+        }<a class="text-link" href={url("events/")}>← All events</a>
+      </aside><div class="detail-main">
+        <Photo
+          name={d.cover}
+          alt={d.coverAlt}
+          eager
+          poster={d.cover === d.poster}
+        /><div class="prose"><h2>About this event</h2><Content /></div>{
+          d.poster && d.cover !== d.poster && (
+            <details class="poster-disclosure">
+              <>
+                <summary>
+                  View original event poster <span aria-hidden="true">＋</span>
+                </summary>
+                <Photo
+                  name={d.poster}
+                  alt={`Original poster for ${d.title}`}
+                  poster
+                />
+              </>
+            </details>
+          )
+        }
+      </div>
+    </div>
+  </div></Layout
+>

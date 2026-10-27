@@ -1,0 +1,156 @@
+---
+import { getCollection } from "astro:content";
+import { url } from "../lib/site";
+const events = await getCollection("events", ({ data }) => !data.draft);
+const paths = [
+  {
+    id: "Workshop",
+    title: "Make something.",
+    label: "Hands-on learning",
+    number: "01",
+    symbol: "{ }",
+    copy: "Get closer to the tools. From Git workflows to AI, explore technology through hands-on sessions.",
+    link: "Explore workshops",
+  },
+  {
+    id: "Industry Visit",
+    title: "See what’s possible.",
+    label: "Beyond the classroom",
+    number: "02",
+    symbol: "↗",
+    copy: "Step into the wider world of technology. Discover how ideas become real-world work on our industry visits.",
+    link: "Explore industry visits",
+  },
+  {
+    id: "Conference",
+    title: "Think a little bigger.",
+    label: "Ideas worth sharing",
+    number: "03",
+    symbol: "✳",
+    copy: "Meet new perspectives on technology, data and digital transformation through talks and conferences.",
+    link: "Explore conferences",
+  },
+];
+---
+
+<section class="pathway-section section wrap" aria-labelledby="pathway-heading">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">Choose your own starting point</span><h2
+        id="pathway-heading"
+      >
+        What sparks <span class="serif-word">your</span> curiosity?
+      </h2>
+    </div><span class="technical-note">THREE PATHS. ONE COMMUNITY.</span>
+  </div><div
+    class="pathway-tabs"
+    role="tablist"
+    aria-label="Explore activity types"
+    hidden
+  >
+    {
+      paths.map((p, i) => (
+        <button
+          id={`tab-${i}`}
+          type="button"
+          role="tab"
+          aria-selected={i === 0}
+          aria-controls={`path-${i}`}
+          tabindex={i === 0 ? 0 : -1}
+        >
+          <span>{p.number}</span>
+          {p.label}
+          <span aria-hidden="true">↗</span>
+        </button>
+      ))
+    }
+  </div><div class="pathway-panels">
+    {
+      paths.map((p, i) => (
+        <article id={`path-${i}`} class="pathway-panel" data-pathway>
+          <>
+            <div class="pathway-symbol" aria-hidden="true">
+              <>
+                <span>{p.symbol}</span>
+                <i />
+                <i />
+              </>
+            </div>
+            <div class="pathway-copy">
+              <>
+                <span class="eyebrow">{p.label}</span>
+                <h3>{p.title}</h3>
+                <p>{p.copy}</p>
+                <a
+                  class="text-link"
+                  href={url(`events/?type=${encodeURIComponent(p.id)}`)}
+                >
+                  {p.link} ↗
+                </a>
+              </>
+            </div>
+            <div class="pathway-events">
+              <span class="eyebrow">From our archive</span>
+              {events
+                .filter((e) => e.data.category === p.id)
+                .slice(0, 2)
+                .map((e) => (
+                  <a href={url(`events/${e.id}/`)}>
+                    {e.data.title}
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                ))}
+            </div>
+          </>
+        </article>
+      ))
+    }
+  </div>
+</section>
+<script>
+  const tabs = [
+    ...document.querySelectorAll<HTMLButtonElement>(".pathway-tabs [role=tab]"),
+  ];
+  const panels = [...document.querySelectorAll<HTMLElement>("[data-pathway]")];
+  if (tabs.length) {
+    (document.querySelector(".pathway-tabs") as HTMLElement).hidden = false;
+    panels.forEach((p, i) => {
+      p.setAttribute("role", "tabpanel");
+      p.setAttribute("aria-labelledby", tabs[i].id);
+      p.tabIndex = 0;
+      p.hidden = i !== 0;
+    });
+    function select(index: number) {
+      tabs.forEach((t, i) => {
+        t.setAttribute("aria-selected", String(i === index));
+        t.tabIndex = i === index ? 0 : -1;
+        panels[i].hidden = i !== index;
+      });
+      if (
+        !matchMedia("(prefers-reduced-motion: reduce)").matches &&
+        document.documentElement.dataset.motion !== "paused"
+      )
+        panels[index].animate(
+          [
+            { opacity: 0.3, transform: "translateY(12px)" },
+            { opacity: 1, transform: "translateY(0)" },
+          ],
+          { duration: 350, easing: "cubic-bezier(.22,1,.36,1)" },
+        );
+    }
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => select(i));
+      t.addEventListener("keydown", (e) => {
+        let n = i;
+        if (e.key === "ArrowRight") n = (i + 1) % tabs.length;
+        else if (e.key === "ArrowLeft") n = (i + tabs.length - 1) % tabs.length;
+        else if (e.key === "Home") n = 0;
+        else if (e.key === "End") n = tabs.length - 1;
+        else return;
+        e.preventDefault();
+        select(n);
+        tabs[n].focus();
+      });
+    });
+  }
+</script>

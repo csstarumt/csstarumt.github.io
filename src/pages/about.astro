@@ -1,0 +1,96 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Photo from "../components/Photo.astro";
+import JoinBanner from "../components/JoinBanner.astro";
+import { url } from "../lib/site";
+---
+
+<Layout title="About"
+  ><section class="page-intro wrap">
+    <span class="eyebrow">Meet your community</span><h1>
+      Curiosity brings us together.<br /><span class="blue"
+        >Technology takes us further.</span>
+    </h1><p>
+      We are TARUMT Computer Science Society — a student community developing
+      digital literacy, technical skills and connections with the technology
+      industry.
+    </p>
+  </section>
+  <section class="wrap about-image">
+    <Photo
+      name="google-ai-lab-hands-on.jpg"
+      alt="Students working together on laptops at The Google AI Lab"
+      eager
+    /><span class="image-label">THE GOOGLE AI LAB / COMMUNITY IN ACTION</span>
+  </section>
+  <section class="section wrap about-grid">
+    <div>
+      <span class="eyebrow">What we're here for</span><h2>
+        A place to learn.<br />People to learn with.
+      </h2><p>
+        There is more to technology than what happens in a lecture. Through
+        shared experiences, CSS helps students explore new tools, exchange ideas
+        and connect learning with the world beyond campus.
+      </p><a class="text-link" href={url("events/")}>Discover our events ↗</a>
+    </div><div class="values-list">
+      {
+        [
+          [
+            "01",
+            "Learn by doing",
+            "Hands-on workshops explore tools and ideas, from version control to artificial intelligence.",
+          ],
+          [
+            "02",
+            "See beyond campus",
+            "Industry visits connect students with real-world technology and career perspectives.",
+          ],
+          [
+            "03",
+            "Share what sparks your interest",
+            "Conferences and community activities make space for new ideas and conversations.",
+          ],
+        ].map(([n, t, d]) => (
+          <div>
+            <>
+              <span class="big-index">{n}</span>
+              <div>
+                <>
+                  <h3>{t}</h3>
+                  <p>{d}</p>
+                </>
+              </div>
+            </>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+  <section class="section wrap" id="achievements">
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">Community milestones</span><h2>
+          Recognition we share.
+        </h2><p>Celebrating the collective effort behind CSS.</p>
+      </div><span class="technical-note">2025 / 2026</span>
+    </div><div class="award-gallery">
+      <figure>
+        <Photo
+          name="tara_MostActive.png"
+          alt="Most Active Club and Society 2025/2026 award"
+          poster
+        /><figcaption>
+          <h3>Most Active Club & Society</h3><p>2025/2026</p>
+        </figcaption>
+      </figure><figure>
+        <Photo
+          name="tara_BestImproved.png"
+          alt="Best Improved Club and Society 2025/2026 award"
+          poster
+        /><figcaption>
+          <h3>Best Improved Club & Society</h3><p>2025/2026</p>
+        </figcaption>
+      </figure>
+    </div>
+  </section><JoinBanner /></Layout
+>

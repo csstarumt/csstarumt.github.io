@@ -1,0 +1,73 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Photo from "../components/Photo.astro";
+import { site } from "../lib/site";
+---
+
+<Layout title="Join & Contact"
+  ><section class="page-intro wrap">
+    <span class="eyebrow">Make your next connection</span><h1>
+      Bring your curiosity.<br /><span class="blue">Find your community.</span>
+    </h1><p>
+      Explore technology with people who share your interests. Start your next
+      chapter with TARUMT CSS.
+    </p>
+  </section><section class="wrap join-grid">
+    <div class="membership-panel">
+      <span class="eyebrow">Join the society</span><h2>
+        Let's get you started.
+      </h2><ol class="join-steps">
+        <li>
+          <strong>Get to know CSS</strong><p>
+            Explore our activities and see what sparks your interest.
+          </p>
+        </li><li>
+          <strong>Open the membership form</strong><p>
+            Review the current joining information and complete the form on
+            Google Forms.
+          </p>
+        </li><li>
+          <strong>Stay connected</strong><p>
+            Follow our social channels for society news and activity
+            announcements.
+          </p>
+        </li>
+      </ol><a
+        class="button"
+        href={site.membershipUrl}
+        target="_blank"
+        rel="noopener noreferrer">Open membership form ↗</a
+      ><p class="small-note">
+        Membership and event registration are separate. For an individual
+        activity, use its event page.
+      </p>
+    </div><div class="join-photo">
+      <Photo
+        name="my5g-community.jpg"
+        alt="CSS members together in the colourful My5G Portal exhibition space"
+        eager
+      /><span class="image-label">IDEAS ARE BETTER TOGETHER.</span>
+    </div>
+  </section><section class="section wrap contact-grid" id="contact">
+    <div>
+      <span class="eyebrow">Say hello</span><h2>
+        A conversation<br />starts here.
+      </h2><p>
+        Questions about the society or an activity?<br />Reach out through email
+        or our social channels.
+      </p><a class="email-link" href={`mailto:${site.email}`}>{site.email} ↗</a>
+    </div><div class="social-list">
+      {
+        site.socials.map((s, i) => (
+          <a href={s.url} target="_blank" rel="noopener noreferrer">
+            <>
+              <span class="big-index">0{i + 1}</span>
+              <strong>{s.name}</strong>
+              <span aria-hidden="true">↗</span>
+            </>
+          </a>
+        ))
+      }
+    </div>
+  </section></Layout
+>

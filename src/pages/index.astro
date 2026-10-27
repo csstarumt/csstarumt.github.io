@@ -1,0 +1,173 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import LivePlayground from "../components/LivePlayground.astro";
+import Pathways from "../components/Pathways.astro";
+import PhotoDeck from "../components/PhotoDeck.astro";
+import Photo from "../components/Photo.astro";
+import JoinBanner from "../components/JoinBanner.astro";
+import { url } from "../lib/site";
+import { eventOrder, isUpcoming, displayDate } from "../lib/events";
+const all = (await getCollection("events", ({ data }) => !data.draft)).sort(
+  eventOrder,
+);
+const upcoming = all.filter((e) => isUpcoming(e.data)).slice(0, 3);
+---
+
+<Layout>
+  <section class="hero wrap" id="home">
+    <div class="hero-copy">
+      <span class="hero-edition eyebrow"
+        >A student community. A world of possibilities.</span
+      ><span class="eyebrow">TARUMT Computer Science Society</span><h1>
+        <span class="hero-line">Learn<span class="title-dot">.</span></span
+        ><span class="hero-line">Build<span class="title-dot">.</span></span
+        ><span class="hero-line blue"
+          >Connect<span class="title-dot">.</span></span
+        >
+      </h1><p>
+        A community for curious minds.<br />Explore technology, build your
+        skills,<br class="desktop-break" /> and grow together.
+      </p><div class="button-row">
+        <a class="button" href={url("join/")}
+          >Join CSS <span aria-hidden="true">↗</span></a
+        ><a class="button button-outline" href={url("events/")}
+          >Explore events <span aria-hidden="true">↗</span></a
+        >
+      </div><span class="hero-scroll-hint"
+        ><span aria-hidden="true">↓</span> Scroll to explore our world</span
+      >
+    </div>
+    <div class="home-playground"><LivePlayground /></div>
+  </section>
+  <div class="signal-strip" aria-label="Learn, build and connect through CSS">
+    <div class="signal-track" aria-hidden="true">
+      <span>LEARN BY DOING</span><i>✳</i><span>BUILD TOGETHER</span><i>↗</i
+      ><span>STAY CURIOUS</span><i>{}</i><span>LEARN BY DOING</span><i>✳</i
+      ><span>BUILD TOGETHER</span><i>↗</i><span>STAY CURIOUS</span><i>{}</i
+      ><span>LEARN BY DOING</span><i>✳</i><span>BUILD TOGETHER</span><i>↗</i
+      ><span>STAY CURIOUS</span><i>{}</i><span>LEARN BY DOING</span><i>✳</i
+      ><span>BUILD TOGETHER</span><i>↗</i><span>STAY CURIOUS</span><i>{}</i>
+    </div>
+  </div><Pathways />
+  <section class="section wrap" id="upcoming">
+    <span id="schedule" class="anchor"></span><div class="section-heading">
+      <div>
+        <span class="eyebrow">What's next</span><h2>
+          Find your next experience.
+        </h2><p>Learn something new. Meet your people.</p>
+      </div><a class="text-link" href={url("events/")}
+        >View all events <span aria-hidden="true">↗</span></a
+      >
+    </div>
+    {
+      upcoming.map((e, i) => (
+        <article
+          class="upcoming-row"
+          data-home-upcoming
+          data-timing={JSON.stringify(e.data)}
+        >
+          <>
+            <span class="big-index">0{i + 1}</span>
+            <div>
+              <>
+                <span class="eyebrow">{e.data.category}</span>
+                <h3>
+                  <a href={url(`events/${e.id}/`)}>{e.data.title}</a>
+                </h3>
+                <p>
+                  {e.data.status === "tba"
+                    ? "Date to be announced"
+                    : displayDate(e.data.start)}
+                  {e.data.location ? ` · ${e.data.location}` : ""}
+                </p>
+              </>
+            </div>
+            <a class="text-link" href={url(`events/${e.id}/`)}>
+              View details ↗
+            </a>
+          </>
+        </article>
+      ))
+    }
+    <div
+      class="upcoming-empty"
+      data-upcoming-empty
+      hidden={upcoming.length > 0}
+    >
+      <span class="empty-symbol" aria-hidden="true">↗</span><div>
+        <h3>The next chapter is on its way.</h3><p>
+          New events will appear here once confirmed.<br />In the meantime, see
+          what we've been up to.
+        </p>
+      </div><a class="text-link" href={url("events/?status=past")}
+        >Explore past events ↗</a
+      >
+    </div>
+  </section>
+  <section class="moments-section" id="events">
+    <div class="wrap section">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Community in action</span><h2>
+            Made of moments like these.
+          </h2>
+        </div><span class="technical-note">REAL PEOPLE. SHARED CURIOSITY.</span>
+      </div><div class="moments-grid">
+        <PhotoDeck /><div class="moment-copy">
+          <span class="eyebrow">Beyond the classroom</span><h3>
+            Good ideas start<br />with good company.
+          </h3><p>
+            From hands-on workshops to industry visits, CSS brings students
+            together to explore technology and learn from one another.
+          </p><a class="text-link" href={url("about/")}>Get to know CSS ↗</a><a
+            class="mini-story"
+            href={url("events/google-ai-lab/")}
+            ><Photo
+              name="google-ai-lab-hands-on.jpg"
+              alt="Students working on laptops at Google AI Lab"
+            /><div>
+              <span class="eyebrow">Workshop</span><strong
+                >The Google AI Lab</strong
+              ><span>Explore the event ↗</span>
+            </div></a
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section wrap awards-section" id="highlights">
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">A little recognition. A lot of teamwork.</span><h2
+        >
+          Growing together.
+        </h2>
+      </div><a class="text-link" href={url("about/#achievements")}
+        >Our achievements ↗</a
+      >
+    </div><div class="awards-strip">
+      <div>
+        <span class="award-icon" aria-hidden="true">✳</span><div>
+          <span class="eyebrow">2025 / 2026</span><h3>
+            Most Active<br />Club & Society
+          </h3>
+        </div>
+      </div><div>
+        <span class="award-icon" aria-hidden="true">✧</span><div>
+          <span class="eyebrow">2025 / 2026</span><h3>
+            Best Improved<br />Club & Society
+          </h3>
+        </div>
+      </div><p>Built on the energy<br />of our community.</p>
+    </div>
+  </section>
+  <section class="gallery-teaser wrap" id="gallery">
+    <span class="eyebrow">Behind every event, a community</span><h2>
+      More than a photo.<br />A shared experience.
+    </h2><a class="button button-outline" href={url("gallery/")}
+      >Explore the gallery ↗</a
+    >
+  </section>
+  <div id="contact"><JoinBanner /></div>
+</Layout>
