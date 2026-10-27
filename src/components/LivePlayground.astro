@@ -1,0 +1,75 @@
+---
+import "../styles/playground.css";
+import { scenes, previewDocument } from "../lib/playground";
+---
+
+<div class="code-lab">
+  <header class="code-toolbar">
+    <span><b aria-hidden="true">&#123; &#125;</b> Live CSS playground</span
+    ><button type="button" data-expand aria-expanded="false">Expand ↗</button>
+  </header>
+  <div class="code-tabs" role="group" aria-label="Choose an experiment">
+    {
+      Object.entries(scenes).map(([id, scene], i) => (
+        <button type="button" data-scene={id} aria-pressed={i === 0}>
+          <span>0{i + 1}</span> {scene.name}
+        </button>
+      ))
+    }
+    <span class="code-live">● LIVE</span>
+  </div>
+  <div class="code-split">
+    <section class="code-source" aria-label="Live CSS code">
+      <div class="code-file">
+        <span data-filename>shape.css</span><span>LIVE CODE</span>
+      </div>
+      <div class="code-input-wrap">
+        <pre class="code-highlight" aria-hidden="true"><code /></pre><textarea
+          aria-label="CSS code (read only)"
+          readonly
+          spellcheck="false"
+          autocapitalize="off"
+          autocomplete="off"
+          wrap="off"
+          aria-describedby="code-hint code-status">{scenes.shape.css}</textarea>
+      </div>
+    </section>
+    <section class="code-canvas" aria-label="Live preview">
+      <div class="code-canvas-label">
+        YOUR CANVAS <span>CSS → pixels</span>
+      </div><iframe
+        title="CSS experiment preview"
+        sandbox="allow-same-origin"
+        referrerpolicy="no-referrer"
+        srcdoc={previewDocument("shape", scenes.shape.css, false)}></iframe><p
+        id="code-hint"
+      >
+        {scenes.shape.hint}
+      </p>
+    </section>
+  </div>
+  <div class="code-actions">
+    <span>TRY IT</span><button type="button" data-preset="round"
+      >Make it round</button
+    ><button type="button" data-preset="spin">Spin it</button><button
+      type="button"
+      data-preset="surprise">Surprise me ✳</button>
+  </div>
+  <footer class="code-bottom">
+    <p id="code-status" role="status" aria-live="polite">
+      Choose an effect to see the code change.
+    </p><div>
+      <button type="button" data-pause aria-pressed="false">Pause</button
+      ><button type="button" data-reset-code>Reset ↺</button>
+    </div>
+  </footer>
+  <noscript
+    ><p class="code-noscript">
+      Enable JavaScript to try the effects. The default preview is shown
+      above.
+    </p></noscript
+  >
+</div>
+<script>
+  import "../scripts/playground";
+</script>

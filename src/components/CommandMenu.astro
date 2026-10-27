@@ -1,0 +1,139 @@
+---
+import { getCollection } from "astro:content";
+import { url } from "../lib/site";
+const items = [
+  { title: "Home", kind: "Page", href: url() },
+  { title: "About CSS", kind: "Page", href: url("about/") },
+  { title: "All events", kind: "Page", href: url("events/") },
+  { title: "Photo gallery", kind: "Page", href: url("gallery/") },
+  { title: "Join & contact", kind: "Page", href: url("join/") },
+  ...(await getCollection("events", ({ data }) => !data.draft)).map((e) => ({
+    title: e.data.title,
+    kind: e.data.category,
+    href: url(`events/${e.id}/`),
+  })),
+];
+---
+
+<dialog class="command-menu" aria-labelledby="command-title">
+  <div class="command-heading">
+    <h2 id="command-title">Find your next stop.</h2><button
+      type="button"
+      data-command-close
+      aria-label="Close search">Esc</button>
+  </div><label class="command-input"
+    ><span aria-hidden="true">⌕</span><span class="sr-only"
+      >Search pages and events</span
+    ><input
+      type="search"
+      placeholder="Search pages, events, ideas…"
+      autocomplete="off"
+    /></label
+  ><p class="sr-only" data-search-status role="status"></p><ul
+    class="command-results"
+  >
+    {
+      items.map((item) => (
+        <li data-search-item data-search-text={`${item.title} ${item.kind}`}>
+          <a href={item.href}>
+            <>
+              <span>
+                <small>{item.kind}</small>
+                {item.title}
+              </span>
+              <span aria-hidden="true">↗</span>
+            </>
+          </a>
+        </li>
+      ))
+    }
+  </ul><p class="command-empty" hidden>
+    No results. Try “workshop”, “gallery” or “join”.
+  </p><div class="command-footer">
+    <span>↑ ↓ to navigate</span><span>Enter to explore · Esc to close</span>
+  </div>
+</dialog>
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>(".command-menu");
+  const openers = [
+    ...document.querySelectorAll<HTMLButtonElement>("[data-command-open]"),
+  ];
+  if (dialog) {
+    const input = dialog.querySelector<HTMLInputElement>("input")!;
+    const items = [
+      ...dialog.querySelectorAll<HTMLElement>("[data-search-item]"),
+    ];
+    let trigger: HTMLElement | null = null;
+    const filter = () => {
+      const term = input.value.trim().toLowerCase();
+      let count = 0;
+      items.forEach((item) => {
+        item.hidden = !item.dataset.searchText!.toLowerCase().includes(term);
+        if (!item.hidden) count++;
+      });
+      dialog.querySelector<HTMLElement>(".command-empty")!.hidden = count > 0;
+      dialog.querySelector("[data-search-status]")!.textContent =
+        `${count} results`;
+    };
+    const open = () => {
+      if (dialog.open) return;
+      trigger = document.activeElement as HTMLElement;
+      input.value = "";
+      filter();
+      dialog.showModal();
+      document.documentElement.classList.add("dialog-open");
+      input.focus();
+    };
+    openers.forEach((b) => {
+      b.hidden = false;
+      b.addEventListener("click", open);
+    });
+    dialog
+      .querySelector("[data-command-close]")!
+      .addEventListener("click", () => dialog.close());
+    dialog.addEventListener("close", () => {
+      document.documentElement.classList.remove("dialog-open");
+      trigger?.focus();
+    });
+    dialog.addEventListener("click", (e) => {
+      if (e.target === dialog) {
+        const r = dialog.getBoundingClientRect();
+        if (
+          e.clientX < r.left ||
+          e.clientX > r.right ||
+          e.clientY < r.top ||
+          e.clientY > r.bottom
+        )
+          dialog.close();
+      }
+    });
+    input.addEventListener("input", filter);
+    document.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        dialog.open ? dialog.close() : open();
+      }
+    });
+    dialog.addEventListener("keydown", (e) => {
+      const visible = items
+        .filter((i) => !i.hidden)
+        .map((i) => i.querySelector<HTMLAnchorElement>("a")!);
+      const index = visible.indexOf(
+        document.activeElement as HTMLAnchorElement,
+      );
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        const next =
+          e.key === "ArrowDown"
+            ? (index + 1) % visible.length
+            : index <= 0
+              ? visible.length - 1
+              : index - 1;
+        visible[next]?.focus();
+      } else if (e.key === "Enter" && document.activeElement === input) {
+        e.preventDefault();
+        visible[0]?.click();
+      }
+    });
+  }
+</script>

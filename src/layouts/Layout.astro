@@ -1,0 +1,232 @@
+---
+import "@fontsource/space-grotesk/400.css";
+import "@fontsource/space-grotesk/500.css";
+import "@fontsource/space-grotesk/600.css";
+import "@fontsource/space-grotesk/700.css";
+import "@fontsource/dm-sans/400.css";
+import "@fontsource/dm-sans/500.css";
+import "@fontsource/dm-sans/600.css";
+import { getImage } from "astro:assets";
+import { asset } from "../lib/assets";
+import { site, url } from "../lib/site";
+import "../styles/global.css";
+import "../styles/lab.css";
+import CommandMenu from "../components/CommandMenu.astro";
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+const {
+  title,
+  description = site.description,
+  image = "google-ai-lab-hands-on.jpg",
+  noindex = false,
+} = Astro.props;
+const fullTitle = title
+  ? `${title} | TARUMT CSS`
+  : `${site.name} — Learn. Build. Connect.`;
+const canonical = new URL(
+  noindex ? url("404.html") : Astro.url.pathname,
+  Astro.site,
+);
+const social = await getImage({
+  src: asset(image),
+  width: 1200,
+  format: "jpg",
+});
+const logo = await getImage({
+  src: asset("logo.png"),
+  width: 840,
+  format: "webp",
+});
+const navigation = [
+  ["About", "about/"],
+  ["Events", "events/"],
+  ["Gallery", "gallery/"],
+  ["Contact", "join/#contact"],
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head
+    ><meta charset="UTF-8" /><meta
+      name="viewport"
+      content="width=device-width"
+    /><meta name="generator" content={Astro.generator} /><title>
+      {fullTitle}
+    </title><meta name="description" content={description} /><link
+      rel="canonical"
+      href={canonical}
+    /><link rel="icon" type="image/webp" href={logo.src} /><meta
+      name="theme-color"
+      content="#F8FAFD"
+    /><meta property="og:title" content={fullTitle} /><meta
+      property="og:description"
+      content={description}
+    /><meta property="og:type" content="website" /><meta
+      property="og:url"
+      content={canonical}
+    /><meta
+      property="og:image"
+      content={new URL(social.src, Astro.site)}
+    /><meta name="twitter:card" content="summary_large_image" />{
+      noindex && <meta name="robots" content="noindex" />
+    }<slot name="head" /></head
+  >
+  <body>
+    <div class="reading-progress" aria-hidden="true"></div>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="nav-inner wrap">
+        <a class="brand" href={url()} aria-label="TARUMT CSS home"
+          ><svg
+            class="brand-logo"
+            viewBox="100 450 1480 650"
+            aria-hidden="true"
+            focusable="false"
+            ><image href={logo.src} width="1680" height="1680" /></svg
+          ></a
+        >
+        <button
+          class="search-trigger"
+          type="button"
+          data-command-open
+          aria-label="Search pages and events"
+          hidden><span aria-hidden="true">⌕</span><kbd>⌘ K</kbd></button
+        >
+        <button
+          class="menu-toggle"
+          aria-controls="main-nav"
+          aria-expanded="false"
+          hidden>Menu <span aria-hidden="true">☰</span></button
+        >
+        <nav id="main-nav" aria-label="Main navigation">
+          {
+            navigation.map(([label, path]) => (
+              <a
+                href={url(path)}
+                aria-current={
+                  Astro.url.pathname === url(path) ? "page" : undefined
+                }
+              >
+                {label}
+              </a>
+            ))
+          }<a class="button button-small" href={url("join/")}
+            >Join CSS <span aria-hidden="true">↗</span></a
+          >
+        </nav>
+      </div>
+    </header>
+    <CommandMenu />
+    <main id="main"><slot /></main>
+    <footer class="site-footer wrap">
+      <div class="footer-top">
+        <div>
+          <a class="footer-brand" href={url()}
+            >TARUMT Computer Science Society<span class="blue">.</span></a
+          ><p>A community for curious minds.</p>
+        </div><div class="footer-socials">
+          {
+            site.socials.map((s) => (
+              <a href={s.url} target="_blank" rel="noopener noreferrer">
+                {s.name} <span aria-hidden="true">↗</span>
+              </a>
+            ))
+          }
+        </div>
+      </div><div class="footer-bottom">
+        <button type="button" data-motion-toggle aria-pressed="false" hidden
+          >Pause motion</button
+        ><span
+          >© {new Date().getFullYear()} TARUMT Computer Science Society</span
+        ><a href={`mailto:${site.email}`}>{site.email}</a><a
+          href={url("about/")}>Learn more about CSS ↗</a
+        >
+      </div>
+    </footer>
+    <script>
+      import { statusOf, isUpcoming, labels, canRegister } from "../lib/events";
+      import "../scripts/motion";
+      const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
+      const nav = document.querySelector<HTMLElement>("#main-nav");
+      if (toggle && nav) {
+        toggle.hidden = false;
+        const close = () => {
+          toggle.setAttribute("aria-expanded", "false");
+          nav.classList.remove("is-open");
+        };
+        toggle.addEventListener("click", () => {
+          const open = toggle.getAttribute("aria-expanded") !== "true";
+          toggle.setAttribute("aria-expanded", String(open));
+          nav.classList.toggle("is-open", open);
+        });
+        nav
+          .querySelectorAll("a")
+          .forEach((a) => a.addEventListener("click", close));
+        document.addEventListener("keydown", (e) => {
+          if (
+            e.key === "Escape" &&
+            toggle.getAttribute("aria-expanded") === "true"
+          ) {
+            close();
+            toggle.focus();
+          }
+        });
+        document.addEventListener("click", (e) => {
+          if (
+            !nav.contains(e.target as Node) &&
+            !toggle.contains(e.target as Node)
+          )
+            close();
+        });
+        matchMedia("(min-width: 761px)").addEventListener("change", close);
+        document.documentElement.classList.add("js");
+      }
+      function refresh() {
+        document
+          .querySelectorAll<HTMLElement>("[data-timing]")
+          .forEach((el) => {
+            const timing = JSON.parse(el.dataset.timing!);
+            const state = statusOf(timing);
+            el.dataset.state = state;
+            el.querySelectorAll("[data-status-label]").forEach(
+              (label) => (label.textContent = labels[state]),
+            );
+            el.querySelectorAll<HTMLElement>("[data-registration]").forEach(
+              (link) => (link.hidden = !canRegister(timing)),
+            );
+            el.querySelectorAll<HTMLElement>(
+              "[data-registration-note]",
+            ).forEach((note) => {
+              note.hidden = canRegister(timing);
+              note.textContent =
+                state === "past"
+                  ? "This event has ended."
+                  : state === "cancelled"
+                    ? "This event has been cancelled."
+                    : state === "tba"
+                      ? "The date will be announced once confirmed."
+                      : "Registration is not currently open.";
+            });
+            if (el.hasAttribute("data-home-upcoming"))
+              el.hidden = !isUpcoming(timing);
+          });
+        const home = document.querySelector<HTMLElement>(
+          "[data-upcoming-empty]",
+        );
+        if (home)
+          home.hidden = !!document.querySelector(
+            "[data-home-upcoming]:not([hidden])",
+          );
+        document.dispatchEvent(new Event("css:status-refresh"));
+      }
+      refresh();
+      setInterval(refresh, 60000);
+      window.addEventListener("pageshow", refresh);
+    </script>
+  </body>
+</html>

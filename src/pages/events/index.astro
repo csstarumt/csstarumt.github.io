@@ -1,0 +1,167 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import EventCard from "../../components/EventCard.astro";
+import JoinBanner from "../../components/JoinBanner.astro";
+import { eventOrder } from "../../lib/events";
+const events = (await getCollection("events", ({ data }) => !data.draft)).sort(
+  eventOrder,
+);
+---
+
+<Layout title="Events"
+  ><section class="page-intro wrap">
+    <span class="eyebrow">Find your next spark</span><h1>
+      Small discoveries.<br /><span class="blue">Bigger possibilities.</span>
+    </h1><p>
+      Workshops, industry visits and conversations that bring technology to
+      life. Explore what's coming and what we've shared.
+    </p>
+  </section>
+  <section class="wrap section events-section">
+    <form class="event-filters" hidden aria-label="Filter events">
+      <div class="filter-tabs" role="group" aria-label="Event status">
+        {
+          [
+            ["all", "All events"],
+            ["upcoming", "Upcoming"],
+            ["past", "Past events"],
+          ].map(([v, l]) => (
+            <button
+              type="button"
+              data-filter-status={v}
+              aria-pressed={v === "all"}
+            >
+              {l}
+            </button>
+          ))
+        }
+      </div><label
+        >Type <select name="category" aria-label="Event type"
+          ><option value="all">All types</option>{
+            ["Workshop", "Industry Visit", "Conference", "Competition"].map(
+              (c) => <option value={c}>{c}</option>,
+            )
+          }</select
+        ></label
+      >
+    </form><p class="results-count" role="status" aria-live="polite">
+      {events.length} events
+    </p><div class="events-grid">
+      {events.map((event) => <EventCard event={event} />)}
+    </div><div class="no-results" hidden>
+      <span class="eyebrow">A little quiet here, for now</span><h2>
+        No events in this selection.
+      </h2><p>Try another filter or explore our past events.</p><button
+        class="button button-outline"
+        type="button"
+        data-reset>Reset filters ↗</button
+      >
+    </div>
+  </section><JoinBanner />
+  <script>
+    import { statusOf, isUpcoming, eventOrder } from "../../lib/events";
+    const form = document.querySelector<HTMLFormElement>(".event-filters")!;
+    const cards = [
+      ...document.querySelectorAll<HTMLElement>("[data-event-card]"),
+    ];
+    const select = form.querySelector<HTMLSelectElement>("select")!;
+    let state = "all";
+    function apply() {
+      let count = 0;
+      cards
+        .sort((a, b) =>
+          eventOrder(
+            { data: JSON.parse(a.dataset.timing!) },
+            { data: JSON.parse(b.dataset.timing!) },
+          ),
+        )
+        .forEach((card) => {
+          card.parentElement!.append(card);
+          card.hidden = !(
+            (state === "all" ||
+              (state === "upcoming"
+                ? isUpcoming(JSON.parse(card.dataset.timing!))
+                : statusOf(JSON.parse(card.dataset.timing!)) === state)) &&
+            (select.value === "all" || card.dataset.category === select.value)
+          );
+          if (!card.hidden) count++;
+        });
+      form
+        .querySelectorAll<HTMLButtonElement>("[data-filter-status]")
+        .forEach((b) =>
+          b.setAttribute(
+            "aria-pressed",
+            String(b.dataset.filterStatus === state),
+          ),
+        );
+      document.querySelector(".results-count")!.textContent =
+        `${count} ${count === 1 ? "event" : "events"}`;
+      (document.querySelector(".no-results") as HTMLElement).hidden =
+        count !== 0;
+    }
+    function read() {
+      const params = new URL(location.href).searchParams;
+      const s = params.get("status") || "all";
+      state =
+        s === "tba"
+          ? "upcoming"
+          : ["all", "upcoming", "past"].includes(s)
+            ? s
+            : "all";
+      const c = params.get("type") || "all";
+      select.value = [...select.options].some((o) => o.value === c) ? c : "all";
+      apply();
+    }
+    function write() {
+      const u = new URL(location.href);
+      state === "all"
+        ? u.searchParams.delete("status")
+        : u.searchParams.set("status", state);
+      select.value === "all"
+        ? u.searchParams.delete("type")
+        : u.searchParams.set("type", select.value);
+      history.pushState(null, "", u);
+      apply();
+      if (
+        !matchMedia("(prefers-reduced-motion: reduce)").matches &&
+        document.documentElement.dataset.motion !== "paused"
+      ) {
+        cards
+          .filter((c) => !c.hidden)
+          .forEach((c, i) =>
+            c.animate(
+              [
+                { opacity: 0.25, transform: "translateY(15px)" },
+                { opacity: 1, transform: "translateY(0)" },
+              ],
+              {
+                duration: 350,
+                delay: i * 35,
+                easing: "cubic-bezier(.22,1,.36,1)",
+              },
+            ),
+          );
+      }
+    }
+    form.hidden = false;
+    read();
+    form.addEventListener("submit", (e) => e.preventDefault());
+    form
+      .querySelectorAll<HTMLButtonElement>("[data-filter-status]")
+      .forEach((b) =>
+        b.addEventListener("click", () => {
+          state = b.dataset.filterStatus!;
+          write();
+        }),
+      );
+    select.addEventListener("change", write);
+    document.querySelector("[data-reset]")!.addEventListener("click", () => {
+      state = "all";
+      select.value = "all";
+      write();
+    });
+    window.addEventListener("popstate", read);
+    document.addEventListener("css:status-refresh", apply);
+  </script></Layout
+>

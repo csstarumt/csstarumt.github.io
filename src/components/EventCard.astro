@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Photo from "./Photo.astro";
+import { url } from "../lib/site";
+import { statusOf, labels, displayDate } from "../lib/events";
+interface Props {
+  event: CollectionEntry<"events">;
+}
+const { event } = Astro.props;
+const d = event.data;
+---
+
+<article
+  class="event-card"
+  data-event-card
+  data-category={d.category}
+  data-timing={JSON.stringify(d)}
+>
+  <a
+    class="event-photo"
+    href={url(`events/${event.id}/`)}
+    aria-label={`View ${d.title}`}
+    ><Photo
+      name={d.cover}
+      alt={d.coverAlt}
+      poster={d.cover === d.poster}
+    /><span class="photo-arrow" aria-hidden="true">↗</span></a
+  >
+  <div class="event-card-meta">
+    <span class="eyebrow">{d.category}</span><span
+      class="status"
+      data-status-label>{labels[statusOf(d)]}</span>
+  </div>
+  <h3><a href={url(`events/${event.id}/`)}>{d.title}</a></h3>
+  <p>{d.summary}</p>
+  <div class="event-date">
+    {
+      d.start
+        ? displayDate(d.start)
+        : d.year
+          ? String(d.year)
+          : d.status === "tba"
+            ? "Date to be announced"
+            : "From the CSS archive"
+    }
+  </div>
+</article>
