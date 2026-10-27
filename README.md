@@ -45,7 +45,7 @@ The original `image/` directory is authoritative. The old root `index.html`, `st
 
 `.github/workflows/check.yml` runs the checks above on pull requests and main pushes. It uploads `dist` as a review artifact without publishing it.
 
-`.github/workflows/pages.yml` runs the same checks and deploys only the resulting `dist` artifact on a push to main, manual main-branch dispatch, or daily refresh (00:17 Malaysia time; GitHub schedules can be delayed). The branch guard prevents manual publication from feature branches. Deployment permissions are limited to the deploy job. No custom secret is required.
+`.github/workflows/pages.yml` runs the same checks and deploys only the resulting `dist` artifact on a push to main, manual main-branch dispatch, or daily refresh (00:17 Malaysia time; GitHub schedules can be delayed). The branch guard prevents manual publication from feature branches. The build job has Pages read permission for configuration lookup; Pages write and OIDC permissions are limited to the deploy job. No custom secret is required.
 
 Before merging the first redesign PR, a repository administrator must set **Settings → Pages → Build and deployment → Source → GitHub Actions**. The current legacy branch publishing mode serves the original root HTML and cannot publish the Astro build. Review any `github-pages` environment approval requirements as well. This change cannot be made with write-only repository access.
 
