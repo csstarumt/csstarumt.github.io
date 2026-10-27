@@ -17,6 +17,10 @@ concurrency:
 
 jobs:
   build:
+    permissions:
+      contents: read
+      # configure-pages reads private repository Pages metadata.
+      pages: read
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
