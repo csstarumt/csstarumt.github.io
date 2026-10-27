@@ -21,7 +21,7 @@ interface Props {
 const {
   title,
   description = site.description,
-  image = "google-ai-lab-hands-on.jpg",
+  image = "logo.png",
   noindex = false,
 } = Astro.props;
 const fullTitle = title
@@ -34,6 +34,9 @@ const canonical = new URL(
 const social = await getImage({
   src: asset(image),
   width: 1200,
+  height: 630,
+  fit: "cover",
+  position: "center",
   format: "jpg",
 });
 const logo = await getImage({
@@ -72,6 +75,9 @@ const navigation = [
     /><meta
       property="og:image"
       content={new URL(social.src, Astro.site)}
+    /><meta property="og:image:width" content="1200" /><meta
+      property="og:image:height" content="630"
+    /><meta name="twitter:image" content={new URL(social.src, Astro.site)}
     /><meta name="twitter:card" content="summary_large_image" />{
       noindex && <meta name="robots" content="noindex" />
     }<slot name="head" /></head
