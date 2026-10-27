@@ -1,7 +1,7 @@
 import { defineConfig } from "astro/config";
 export default defineConfig({
-  site: "https://theycallmewinson.github.io",
-  base: "/Css-website",
+  site: "https://csstarumt.github.io",
+  base: "/",
   trailingSlash: "always",
   output: "static",
   devToolbar: { enabled: false },

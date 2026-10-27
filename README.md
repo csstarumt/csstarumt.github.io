@@ -11,9 +11,9 @@ npm ci
 npm run dev -- --port 4321
 ```
 
-Open **http://127.0.0.1:4321/Css-website/**. Astro 7 may keep its dev server running in the background. Use `npx astro dev status`, `npx astro dev logs`, and `npx astro dev stop` to manage it.
+Open **http://127.0.0.1:4321/**. Astro 7 may keep its dev server running in the background. Use `npx astro dev status`, `npx astro dev logs`, and `npx astro dev stop` to manage it.
 
-For the production output: `npm run build`, then `npm run preview -- --port 4322`. Open http://127.0.0.1:4322/Css-website/.
+For the production output: `npm run build`, then `npm run preview -- --port 4322`. Open http://127.0.0.1:4322/.
 
 ## Verify
 
@@ -49,9 +49,9 @@ The original `image/` directory is authoritative. The old root `index.html`, `st
 
 Before merging the first redesign PR, a repository administrator must set **Settings → Pages → Build and deployment → Source → GitHub Actions**. The current legacy branch publishing mode serves the original root HTML and cannot publish the Astro build. Review any `github-pages` environment approval requirements as well. This change cannot be made with write-only repository access.
 
-After merging, verify the **Deploy GitHub Pages** workflow succeeds and open https://theycallmewinson.github.io/Css-website/ . Check the homepage playground, Events, a nested event URL, Gallery photos and mobile navigation. A passing PR check is not evidence of a live deployment.
+After merging, verify the **Deploy GitHub Pages** workflow succeeds and open https://csstarumt.github.io/ . Check the homepage playground, Events, a nested event URL, Gallery photos and mobile navigation. A passing PR check is not evidence of a live deployment.
 
-The site retains the existing `/Css-website/` prefix. For a custom domain, update Astro `site`/`base`, robots and sitemap origin together, then update and rerun the build-link check.
+The site is configured for the root of `https://csstarumt.github.io/`, using the `csstarumt/csstarumt.github.io` repository. For a custom domain, update Astro `site`/`base`, robots and sitemap origin together, then update and rerun the build-link check.
 
 The independent Vercel review site has no Git integration, backend, database or CMS; it serves a manually uploaded build snapshot. See `docs/PREVIEW-DEPLOYMENT.md` for its scope.
 
